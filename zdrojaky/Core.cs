@@ -81,6 +81,8 @@ namespace Kocky
         public readonly Difficulty Diff;
         public int Money, Lives, Round;
         public bool RoundActive, Lost, Won;
+        // rounds finished: the round in progress does not count, and neither does the one that was lost (a loss ends the round)
+        public int RoundsSurvived { get { return RoundActive || Lost ? Round - 1 : Round; } }
         public bool AutoStart;
         public double Time;
         public readonly List<Vac> Vacs = new List<Vac>();

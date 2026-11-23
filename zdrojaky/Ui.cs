@@ -76,7 +76,7 @@ namespace Kocky
         // the open tree stops the game without touching Paused, so closing it returns to the earlier pause state
         public bool Modal { get { return RulesOpen || Paused || ShowLost || ShowWon || TreeOpen; } }
         public bool WantsHand { get { return HoverBtn != null || hoverCat != null; } }
-        int Survived { get { return G == null ? 0 : G.RoundActive ? G.Round - 1 : G.Round; } }
+        int Survived { get { return G == null ? 0 : G.RoundsSurvived; } }
 
         // ---------- game flow ----------
 

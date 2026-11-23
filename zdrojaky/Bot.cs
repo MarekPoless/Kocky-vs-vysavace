@@ -545,6 +545,8 @@ namespace Kocky
                     if (g.Round <= Defs.FinalRound) r.LivesLost[g.Round] = Math.Max(0, lives - g.Lives);
                     CheckLegends(g);
                 }
+                if (g.RoundsSurvived != (g.Lost ? g.Round - 1 : g.Round))
+                    throw new Exception("rounds survived is " + g.RoundsSurvived + " after round " + g.Round + (g.Lost ? " (lost)" : ""));
             }
             catch (Exception e) { r.Error = e.GetType().Name + ": " + e.Message; }
             r.LegendBlocks = Bot.LegendBlocksOf(g);

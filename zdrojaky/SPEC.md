@@ -81,6 +81,7 @@ public class Game
     public readonly Difficulty Diff;
     public int Money, Lives, Round;        // Round = number of the last started round, 0 before the first
     public bool RoundActive, Lost, Won;    // Won becomes true when round Defs.FinalRound ends with lives left
+    public int RoundsSurvived { get; }     // rounds finished: neither the round in progress nor the lost one counts
     public bool AutoStart;                 // start the next round by itself when one ends
     public double Time;                    // simulated seconds
     public readonly List<Vac> Vacs;

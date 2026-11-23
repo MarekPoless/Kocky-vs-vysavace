@@ -1,0 +1,15 @@
+# Build output. The released binary is dist/KockyVsVysavace.exe, every other exe is built on demand.
+*.exe
+!dist/KockyVsVysavace.exe
+app.ico
+
+# Reports written by --sim, --uitest and the test runs, rendered screenshots
+sim*.txt
+uitest*.txt
+autoplay*.txt
+shots/
+
+# Temporary output and packages
+*.tmp
+*.log
+*.zip

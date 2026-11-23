@@ -37,7 +37,7 @@ Skript nic nezapisuje do repozitáře. Zdrojáky zkopíruje do dočasné složky
 | 5 | `dist\KockyVsVysavace.exe` existuje a zvládne `--sim 1` | hotové exe z README, bod A, aspoň jeho herní jádro |
 | 6 | `--sim 30` skončí kódem 0 a zapíše report | bot dohraje 90 her + volnou hru bez pádu |
 | 7 | report má hlavičku a správný počet her | formát výstupu `--sim` |
-| 8 | `total exceptions: 0` | žádná výjimka v celé simulaci (`Sim` zároveň hlídá pravidlo o legendách) |
+| 8 | `total exceptions: 0` | žádná výjimka v celé simulaci (`Sim` zároveň hlídá pravidlo o legendách a to, že prohrané kolo se nepočítá jako přežité) |
 | 9 | v reportu jsou Easy, Medium i Hard | všechny obtížnosti se odehrály |
 | 10 | úspěšnost bota: Lehká aspoň 80 %, Střední 50 až 98 %, Těžká 15 až 65 % | hrubá kontrola vyváženosti; cíle ze `SPEC.md` jsou Lehká skoro vždy, Střední 70 až 90 %, Těžká třetina až polovina, tady s tolerancí |
 | 11 | bot, který přestane vylepšovat v 50. kole, do 62. kola prohraje (aspoň 90 % her, které do 50. kola došly) | cíl volné hry ze `SPEC.md` |
@@ -78,23 +78,25 @@ Určeno pro člověka, který hru zkouší na čerstvě rozbaleném repozitáři
 | 14 | Stiskni `C` (cesta 3). | Cesta 3 je zamčená: řádek je šedý se zámkem a nápisem „Zamčeno“, objeví se hláška „Zamčeno: nejvýš dvě cesty, jen jedna nad 2. stupeň.“ a pamlsky se nezmění. | ☐ |
 | 15 | Se stále vybranou kočkou stiskni `Delete`, potom do 3 sekund znovu `Delete`. | Při prvním stisku se tlačítko změní na „Prodat? Znovu Delete“ a kočka zůstane. Po druhém kočka zmizí a pamlsky vzrostou o 269 (70 % z 385 utracených). | ☐ |
 | 16 | Stiskni `P`, klikni „Do menu“ a potvrď „Opravdu? Hra se neuloží“. Klikni „Hrát“, vyber „Těžká“ (`3`), nic nestav, pusť kolo 1 a přepni na rychlost 3×. | Hra začne s 50 životy a 600 pamlsky. Všech 20 Robíků dojede k pelíšku vpravo nahoře (efekt a zvuk u pelíšku). Po kole životy klesnou na 30 a pamlsky vzrostou na 701. | ☐ |
-| 17 | Pusť kolo 2 (30 Robíků). | Když dojede poslední Robík, životy klesnou na 0 a objeví se okno „Vysavače vysály pelíšek!“ s textem „Obtížnost Těžká“ a statistikou „Přežitá kola“, „Rozbité vrstvy 0“, „Nejlepší výsledek (Těžká)“ a tlačítky „Zkusit znovu“ a „Do menu“. „Přežitá kola“ má ukazovat 1 (kolo 2 se prohrálo); hra ve skutečnosti ukáže 2, viz „Známé odchylky“. | ☐ |
+| 17 | Pusť kolo 2 (30 Robíků). | Když dojede poslední Robík, životy klesnou na 0 a objeví se okno „Vysavače vysály pelíšek!“ s textem „Obtížnost Těžká“ a statistikou „Přežitá kola“, „Rozbité vrstvy 0“, „Nejlepší výsledek (Těžká)“ a tlačítky „Zkusit znovu“ a „Do menu“. „Přežitá kola“ ukáže 1 (kolo 2 se prohrálo). | ☐ |
 | 18 | Klikni „Do menu“, potom „Konec“ (nebo zavři okno křížkem) a hru spusť znovu. | Úvodní obrazovka ukazuje u Těžké nejlepší kolo. Okno se po „Konec“ zavře a proces zmizí ze Správce úloh. Po novém spuštění jsou zvuk a hudba v tom stavu, v jakém jsi je nechal v kroku 2, protože hra je ukládá do `%APPDATA%\KockyVsVysavace\nastaveni.txt`. | ☐ |
 
 Čím se scénář nepokrývá: výhra ve 40. kole a volná hra (zabere desítky minut). Vítězná obrazovka se vykresluje ve snímku `09-won` z `--shots`, volnou hru zkouší automaticky `--sim`.
 
-### Známé odchylky
+### Opravená odchylka
 
-- **„Přežitá kola“ po prohře je o 1 víc.** Při prohře ve 2. kole ukáže závěrečné okno „Přežitá kola 2“ a „Nejlepší výsledek kolo 2“, ačkoli se dokončilo jen jedno kolo. Příčina: `Ui.Survived` odečítá 1, jen když kolo běží (`G.RoundActive`), ale `Game` (`Core.cs`, dojetí vysavače k pelíšku) při prohře `RoundActive` vypne. Snímek `08-lost` z `--shots` to neodhalí, protože prohru nastavuje uměle bez vypnutí kola. Nalezeno při přípravě tohoto scénáře pomocným programem mimo repozitář a ověřeno na vykresleném okně. Zdrojové soubory nebyly upraveny.
+- **„Přežitá kola“ po prohře byla o 1 víc (opraveno 23. 11. 2026).** Při prohře ve 2. kole ukázalo závěrečné okno „Přežitá kola 2“ a „Nejlepší výsledek kolo 2“, ačkoli se dokončilo jen jedno kolo, a stejné číslo se ukládalo jako nejlepší kolo. Příčina: `Ui.Survived` odečítalo 1, jen když kolo běží (`G.RoundActive`), ale `Game` (`Core.cs`, dojetí vysavače k pelíšku) při prohře `RoundActive` vypne. Teď to počítá `Game.RoundsSurvived` (neběžící ani prohrané kolo se nepočítá) a `Ui` ho jen zobrazuje. Nalezeno při přípravě tohoto scénáře pomocným programem mimo repozitář. Snímek `08-lost` z `--shots` to neodhalil, protože prohru nastavuje uměle bez vypnutí kola.
+- **Jak se to hlídá.** `Sim` po každé hře kontroluje, že `RoundsSurvived` sedí s koncem hry (krok 8 skriptu). Před opravou hlásil u každé prohrané hry „rounds survived is 29 after round 29 (lost)“ (8 z 12 her na Těžké v `--sim 12`), po opravě `total exceptions: 0`. Okno po prohře ve 2. kole na Těžké ukazuje 1 (ověřeno přes třídu `Ui`, před opravou 2). Rekordy uložené před opravou v `%APPDATA%\KockyVsVysavace\nastaveni.txt` mohou být o 1 vyšší.
 
 ## 4. Testy umějí selhat
 
-Aby bylo vidět, že 17 kroků nejsou jen samé PASS, byl skript 23. 11. 2026 spuštěn na dvou záměrně rozbitých kopiích repozitáře v dočasné složce (originál zůstal beze změny), obě s `-SkipUi`:
+Aby bylo vidět, že 17 kroků nejsou jen samé PASS, byl skript 23. 11. 2026 spuštěn na třech záměrně rozbitých kopiích repozitáře v dočasné složce (originál zůstal beze změny), všechny s `-SkipUi`:
 
 | Rozbití | Výsledek skriptu |
 |---|---|
 | v `Core.cs` přebývají dvě otevírací složené závorky za hlavičkou metody `StartRound` (syntaktická chyba) | překlad selže (`error CS1513`), 3 FAIL (překlad, ikona, „Test se dokončil“), návratový kód 1, ostatní kroky se přeskočí |
 | v `Defs.cs` má Keramik 2200 výdrže místo 22 | překlad i všechny technické kroky projdou, ale bot nevyhraje žádnou hru (Lehká 0 %, Střední 0 %, Těžká 0 %): 3 FAIL (meze úspěšnosti a obě kontroly volné hry), 11 PASS, kód 1 |
+| v `Core.cs` se vrátila původní chyba: `RoundsSurvived` počítá prohrané kolo jako přežité (`RoundActive ? Round - 1 : Round`) | překlad a ostatní kroky projdou, jen krok „Simulace proběhla bez jediné výjimky“ skončí FAIL (113 výjimek), 13 PASS, 1 FAIL, kód 1 |
 
 ## 5. Výsledky běhu 23. 11. 2026
 
@@ -122,6 +124,8 @@ Souhrn: 17 PASS, 0 FAIL
 ```
 
 Návratový kód skriptu byl 0.
+
+Po opravě „Přežitých kol“ (část „Opravená odchylka“) se skript spustil znovu v 19:01 s výchozími parametry: 17 PASS, 0 FAIL, kód 0, `--sim 30` beze změny (Lehká 100,0 %, Střední 86,7 %, Těžká 36,7 %, volná hra 26 z 26 a 7 ze 7), vykreslení snímku v průměru 5,83 ms (nejvíc 51,63 ms), 63 snímků za sekundu.
 
 Čísla z reportu `--sim 30` téhož dne (opakované běhy dávají stejný výsledek):
 

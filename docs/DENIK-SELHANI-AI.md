@@ -2,7 +2,7 @@ KONCEPT: sestaveno ze záznamů sezení, student ho má projít a přepsat do sv
 
 # Deník selhání AI: Kočky vs. vysavače
 
-Autor: Michal Skřipský. Pět případů z vývoje hry 12. 11. 2026. Všechno je převzaté ze záznamů o vývoji (soubor vaultu `CLAUDE slozka na start\logs\2026-11-11-kontrola-skillu-graphify-pamet.md`, oddíly o Kočkách) a ze `zdrojaky\SPEC.md`. Kde záznam neříká, jak se chyba poznala nebo opravila, stojí „v logu není“ a nic není domyšleno. Než to odevzdáš, doplň z paměti, co víš ty (hlavně u „Jak jsem to poznal“).
+Autor: Michal Skřipský. Šest případů: pět z vývoje hry 12. 11. 2026 a šestý z přípravy odevzdání 23. 11. 2026. Všechno je převzaté ze záznamů o vývoji (soubor vaultu `CLAUDE slozka na start\logs\2026-11-11-kontrola-skillu-graphify-pamet.md`, oddíly o Kočkách) a ze `zdrojaky\SPEC.md`. Kde záznam neříká, jak se chyba poznala nebo opravila, stojí „v logu není“ a nic není domyšleno. Než to odevzdáš, doplň z paměti, co víš ty (hlavně u „Jak jsem to poznal“).
 
 ## Případ 1: Vylepšení byla „naslepo“
 
@@ -43,6 +43,14 @@ Autor: Michal Skřipský. Pět případů z vývoje hry 12. 11. 2026. Všechno j
 - **Jak jsem to poznal:** Hlavní Claude prošel celý rozdíl v kódu (záznam: „hlavní Claude prošel celý rozdíl v kódu a opravil 3 drobnosti“).
 - **Jak jsem to opravil:** Hlavní Claude těch 3 drobností opravil. Záznam uvádí kontrolu: rozložení a čísla ve všech 474 stavech koček (nic se neusekne, štítky sedí s čísly v bublině), 21 snímků, test přes okno 2 hry / 70 kol. Co přesně se opravilo, v logu není.
 - **Zdroj:** vault, `logs\2026-11-11-kontrola-skillu-graphify-pamet.md`, oddíl „Kočky: štítky s ikonkami u vylepšení a efekt po koupi (2026-11-12)“.
+
+## Případ 6: Prohrané kolo se počítalo jako přežité
+
+- **Co jsem chtěl:** Aby závěrečné okno po prohře ukázalo, kolik kol jsem přežil, tedy dokončil. Kód to tak zamýšlel: rozehrané kolo se nepočítá (`Round - 1`).
+- **Co AI udělala špatně:** Okno (`Ui.Survived`) odečítalo 1 jen tehdy, když kolo běží (`RoundActive`), jenže při prohře hra kolo vypne. Po prohře ve 2. kole proto okno ukázalo „Přežitá kola 2“ a stejné číslo se uložilo jako nejlepší výsledek, ačkoli se dokončilo jen jedno kolo.
+- **Jak jsem to poznal:** Při hraní jsem si toho nevšiml. Našel to pomocný program, který Claude (Sonnet) napsal při přípravě odevzdání: zahrál prohru přes veřejné rozhraní `Ui` a `Game` a číslo se nezhodovalo s tím, co mělo okno ukázat. Žádný z dosavadních testů to neodhalil (snímek `08-lost` z `--shots` prohru nastavuje uměle, bez vypnutí kola).
+- **Jak jsem to opravil:** Počítání je teď ve `Game.RoundsSurvived` (běžící ani prohrané kolo se nepočítá) a okno ho jen zobrazuje. Hlídá to simulace: před opravou hlásila u každé prohrané hry „rounds survived is 29 after round 29 (lost)“, po opravě `total exceptions: 0`, a skript `tests\run-tests.ps1` na kopii s vrácenou chybou skončil s FAIL (113 výjimek). Okno po prohře ve 2. kole na Těžké ukazuje 1 (před opravou 2).
+- **Zdroj:** příprava odevzdání 23. 11. 2026; commity „fix: …“ v tomto repozitáři; `docs\TESTY.md`, část „Opravená odchylka“.
 
 ## Poznámky
 

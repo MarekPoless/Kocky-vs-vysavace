@@ -185,4 +185,4 @@ Měření vyváženosti botem (běh 23. 11. 2026, 30 her na obtížnost): Lehká
 - **Platforma.** Jen Windows (Windows Forms, `winmm.dll`) a jen česky. Překlad ze zdrojů potřebuje 64bitové Windows, protože `build.ps1` volá `Framework64\v4.0.30319\csc.exe`.
 - **Výkon.** Test přes okno měří dobu vykreslení snímku (v běhu 23. 11. 2026 v průměru 6,01 ms, nejvíc 49,75 ms), ale ne na pomalém počítači.
 - **Uložení hry** není. Rozehranou hru nejde uložit ani načíst, ukládají se jen nastavení a nejlepší kola.
-- **Známá drobnost.** Po prohře ukazuje závěrečné okno „Přežitá kola“ o jedno víc, než se dokončilo (prohrané kolo se počítá jako přežité). Zdrojáky nebyly upraveny; popis je v [TESTY.md](TESTY.md), část „Známé odchylky“.
+- **Uložené rekordy z doby před opravou.** Do 23. 11. 2026 se po prohře počítalo prohrané kolo jako přežité (opraveno, viz [TESTY.md](TESTY.md), část „Opravená odchylka“), takže nejlepší kola uložená dřív v `%APPDATA%\KockyVsVysavace\nastaveni.txt` mohou být o 1 vyšší.

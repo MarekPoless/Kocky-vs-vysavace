@@ -113,8 +113,8 @@ Dohromady je to přibližně 9 600 řádků C#.
 
 ## Využití AI
 
-Zdrojový kód hry napsali agenti Claude od Anthropic. Hlavní Claude podle zadání navrhl hru a napsal sdílená data a rozhraní (`Defs.cs`, `Kit.cs`, `SPEC.md`), potom souběžně pracovali čtyři agenti na modelu Opus, každý na svých souborech: simulace a bot (`Core.cs`, `Bot.cs`), grafika (`Art.cs`), zvuk a hudba (`Audio.cs`), okno a ovládání (`Ui.cs`, `Program.cs`). Michal Skřipský zadával, co hra má umět, hru zkoušel a vracel připomínky, které AI zapracovala (například že vylepšení byla „naslepo“ nebo že volná hra byla pořád lehká). Kontroly dělala hlavně AI: vlastní kontroly pravidel, simulace botem, snímky obrazovek a test přes okno. Ruční hraní bylo omezené a hudbu ani nové zvuky podle záznamů o vývoji nikdo neposlouchal. Podrobnosti jsou v [design dokumentu](docs/DESIGN.md), kapitoly „Jak vznikla s AI“ a „Omezení“, a v [deníku selhání AI](docs/DENIK-SELHANI-AI.md).
+Zdrojový kód hry napsali agenti Claude od Anthropic. Hlavní Claude podle zadání navrhl hru a napsal sdílená data a rozhraní (`Defs.cs`, `Kit.cs`, `SPEC.md`), potom souběžně pracovali čtyři agenti na modelu Opus, každý na svých souborech: simulace a bot (`Core.cs`, `Bot.cs`), grafika (`Art.cs`), zvuk a hudba (`Audio.cs`), okno a ovládání (`Ui.cs`, `Program.cs`). Robin Suchý zadával, co hra má umět, hru zkoušel a vracel připomínky, které AI zapracovala (například že vylepšení byla „naslepo“ nebo že volná hra byla pořád lehká). Kontroly dělala hlavně AI: vlastní kontroly pravidel, simulace botem, snímky obrazovek a test přes okno. Ruční hraní bylo omezené a hudbu ani nové zvuky podle záznamů o vývoji nikdo neposlouchal. Podrobnosti jsou v [design dokumentu](docs/DESIGN.md), kapitoly „Jak vznikla s AI“ a „Omezení“, a v [deníku selhání AI](docs/DENIK-SELHANI-AI.md).
 
 ## Autor
 
-Michal Skřipský, školní projekt AI Challenge – Make a Game (třída ITS 3.F 26/27).
+Robin Suchý, školní projekt AI Challenge – Make a Game (třída ITS 3.F 26/27).

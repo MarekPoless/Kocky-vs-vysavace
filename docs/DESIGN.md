@@ -1,8 +1,8 @@
-Vylosovaná kombinace: (doplní Michal)
+Vylosovaná kombinace: kocka vs roboticky vysavac TD
 
 # Design dokument: Kočky vs. vysavače
 
-Autor: Michal Skřipský. Čísla pravidel jsou ze `zdrojaky\Defs.cs`, `zdrojaky\Core.cs` a `zdrojaky\SPEC.md`, výsledky měření z běhu testů 23. 11. 2026 (podrobnosti v [TESTY.md](TESTY.md)).
+Autor: Robko Suchý, Marko Poles. Čísla pravidel jsou ze `zdrojaky\Defs.cs`, `zdrojaky\Core.cs` a `zdrojaky\SPEC.md`, výsledky měření z běhu testů 23. 11. 2026 (podrobnosti v [TESTY.md](TESTY.md)).
 
 ## 1. Cíl a cílová skupina
 
@@ -154,14 +154,14 @@ Důležitá rozhodnutí:
 
 ## 7. Jak vznikla s AI
 
-Podle záznamů o vývoji vznikla hra celá 12. 11. 2026 (časy změn zdrojových souborů sedí: od 10:44 do 20:26). Kód psali agenti Claude od Anthropic, Michal zadával, zkoušel hru a vracel připomínky.
+Podle záznamů o vývoji vznikla hra celá 12. 11. 2026 (časy změn zdrojových souborů sedí: od 10:44 do 20:26). Kód psali agenti Claude od Anthropic, Robin zadával, zkoušel hru a vracel připomínky.
 
-1. **Zadání a kontrakt.** Michal chtěl hru typu tower defense s vlastním vzhledem a hudbou a „víc agentů, všechny na Opusu (i hudbu)“. Hlavní Claude napsal návrh, sdílená data a rozhraní: `Defs.cs`, `Kit.cs`, `build.ps1` a hlavně `SPEC.md`, technickou smlouvu s přesným API tříd, pravidly simulace, pravidly pro jazyk (C# 5 bez interpolace řetězců, `?.` a dalších novinek) a tabulkou souborů a jejich vlastníků.
+1. **Zadání a kontrakt.** Robin chtěl hru typu tower defense s vlastním vzhledem a hudbou a „víc agentů, všechny na Opusu (i hudbu)“. Hlavní Claude napsal návrh, sdílená data a rozhraní: `Defs.cs`, `Kit.cs`, `build.ps1` a hlavně `SPEC.md`, technickou smlouvu s přesným API tříd, pravidly simulace, pravidly pro jazyk (C# 5 bez interpolace řetězců, `?.` a dalších novinek) a tabulkou souborů a jejich vlastníků.
 2. **Paralelní práce.** Pak souběžně pracovali čtyři agenti na modelu Opus, každý jen na svých souborech: simulace a bot (`Core.cs`, `Bot.cs`), grafika (`Art.cs`), zvuk a hudba (`Audio.cs`) a okno s ovládáním (`Ui.cs`, `Program.cs`). Soubory sdílené všemi (`Kit.cs`, `Defs.cs`) smí měnit jen vlastník, čísla v `Defs.cs` jen autor jádra kvůli vyvážení.
-3. **Iterace podle Michalových připomínek** (všechny 12. 11.):
+3. **Iterace podle Robinových připomínek** (všechny 12. 11.):
    - nejdřív 2 cesty po 3 stupních, pak na přání (vylepšení a vlastní dosah útoku „jak v Bloons TD 6“, tedy podle vzoru existující hry; vzhled, jména a hudba jsou vlastní) rozšíření na 3 cesty × 5 stupňů, 90 vylepšení;
    - vylepšení byla „naslepo“: přibylo okno všech vylepšení, bublina „teď → potom“ s celou cestou a pravidlo legend;
-   - volná hra byla příliš lehká (Michal přestal vylepšovat kolem 70. kola a kočky pořád vydržely), proto se zpřísnila a výdrž vysavačů je vidět na nich samých (Michal: „nedávej tam, kolik má HP“);
+   - volná hra byla příliš lehká (Robin přestal vylepšovat kolem 70. kola a kočky pořád vydržely), proto se zpřísnila a výdrž vysavačů je vidět na nich samých (Robin: „nedávej tam, kolik má HP“);
    - „nevidím, co to dopředu dá za bonus“: popis stupně přímo na tlačítku; „udělej to ještě promakanější“: štítky s ikonkami u každé změny čísla.
 4. **Kontrola.** Po každé změně se podle záznamů dělalo toto: překlad, kontroly pravidel napsané agenty (30, potom 228 a 453 testů; kontrola, že všech 90 vylepšení má účinek; kontrola legend; kontrola rozložení a čísel ve 474 stavech kočky), simulace botem, snímky obrazovek a test přes okno. U poslední úpravy hlavní Claude prošel celý rozdíl v kódu a opravil 3 drobnosti. Podrobněji [deník selhání AI](DENIK-SELHANI-AI.md) a [retrospektiva](RETROSPEKTIVA.md).
 
@@ -177,7 +177,7 @@ Měření vyváženosti botem (běh 23. 11. 2026, 30 her na obtížnost): Lehká
 
 ## 9. Omezení a co nebylo ověřeno
 
-- **Ruční hraní.** Michal hru hrál, došel až do volné hry (z toho vzešlo její zpřísnění), ale poslední verzi (štítky u vylepšení a efekt po koupi) podle záznamů nikdo ručně nehrál. Ověřila ji jen kontrola rozložení, snímky obrazovek a test přes okno. Ruční testovací scénář v [TESTY.md](TESTY.md) zatím nikdo neprošel, je to připravený postup k odehrání.
+- **Ruční hraní.** Robin hru hrál, došel až do volné hry (z toho vzešlo její zpřísnění), ale poslední verzi (štítky u vylepšení a efekt po koupi) podle záznamů nikdo ručně nehrál. Ověřila ji jen kontrola rozložení, snímky obrazovek a test přes okno. Ruční testovací scénář v [TESTY.md](TESTY.md) zatím nikdo neprošel, je to připravený postup k odehrání.
 - **Hudba a zvuky.** Podle záznamů hudbu ani nové zvuky nikdo neposlouchal, jen se změřily. Při automatických testech jsou zvuky vypnuté.
 - **Vyváženost** je změřená jen botem. Bot je rozumný, ale není člověk, takže skutečná obtížnost pro lidi je odhad.
 - **Kontroly agentů nejsou v repozitáři.** Kontroly pravidel (30, 228, 453 testů), kontrola legend, kontrola rozložení a podobné programy, o kterých záznamy mluví, nebyly odevzdány spolu se zdrojáky, takže je nejde znovu spustit. V repozitáři je jen `run-tests.ps1` a přepínače hry. Čísla z těchto kontrol jsou proto citována ze záznamů o vývoji, ne z běhu popsaného v [TESTY.md](TESTY.md).
